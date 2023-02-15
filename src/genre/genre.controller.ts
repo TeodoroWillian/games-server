@@ -1,47 +1,63 @@
-import { Body, Controller, Get, Param, Patch, Post } from "@nestjs/common";
-import { GenreService } from "./genre.service";
-import {CreateGenreDto} from "./dto/create-genre.dto";
-import { ApiOperation, ApiTags } from "@nestjs/swagger/dist/decorators";
-import { Genre } from "./entities/genre.entity";
-import { UpdateGenreDto } from "./dto/update-genre.dto";
-
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { GenreService } from './genre.service';
+import { CreateGenreDto } from './dto/create-genre.dto';
+import { ApiOperation, ApiTags } from '@nestjs/swagger/dist/decorators';
+import { Genre } from './entities/genre.entity';
+import { UpdateGenreDto } from './dto/update-genre.dto';
 
 @ApiTags('genre')
-
 @Controller('genre')
-export class GenreController{
+export class GenreController {
   constructor(private readonly genreService: GenreService) {}
-
 
   @Get()
   @ApiOperation({
-    summary: "Listar todos os gêneros"
+    summary: 'Listar todos os gêneros',
   })
-  findAll(): Promise<Genre[]>{
+  findAll(): Promise<Genre[]> {
     return this.genreService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({
-    summary: "Visualizar um gênero"
+    summary: 'Visualizar um gênero',
   })
-  findOne(@Param('id') id: string): Promise<Genre>{
-    return this.genreService.findOne(id)
+  findOne(@Param('id') id: string): Promise<Genre> {
+    return this.genreService.findOne(id);
   }
 
   @Post()
   @ApiOperation({
-    summary: "Criar um gênero"
+    summary: 'Criar um gênero',
   })
-  create(@Body() dto: CreateGenreDto): Promise<Genre>{
+  create(@Body() dto: CreateGenreDto): Promise<Genre> {
     return this.genreService.create(dto);
   }
 
   @Patch(':id')
   @ApiOperation({
-    summary: "Editar uma mesa pelo ID"
+    summary: 'Editar um genêro pelo ID',
   })
-  update(@Param('id') id: string, @Body() dto: UpdateGenreDto ): Promise<Genre>{
+  update(@Param('id') id: string, @Body() dto: UpdateGenreDto): Promise<Genre> {
     return this.genreService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Deletar um gênero pelo ID',
+  })
+  delete(@Param('id') id: string) {
+    this.genreService.delete(id);
   }
 }

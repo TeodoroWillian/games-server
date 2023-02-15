@@ -5,7 +5,7 @@ import { GenreModule } from './genre/genre.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [GenreModule, PrismaModule ],
+  imports: [GenreModule, PrismaModule],
   controllers: [AppController],
   providers: [AppService],
 })
