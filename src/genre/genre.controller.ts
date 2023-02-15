@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -32,8 +33,13 @@ export class GenreController {
   @ApiOperation({
     summary: 'Visualizar um gênero',
   })
-  findOne(@Param('id') id: string): Promise<Genre> {
-    return this.genreService.findOne(id);
+ async findOne(@Param('id') id: string): Promise<Genre> {
+    const record = await this.genreService.findOne(id);
+
+    if(!record){
+      throw new NotFoundException(`Registro com o ID ${id} não encontrado.`)
+    }
+    return record;
   }
 
   @Post()
