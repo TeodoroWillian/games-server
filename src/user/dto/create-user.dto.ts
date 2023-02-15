@@ -30,11 +30,17 @@ export class CreateUserDto {
   })
   confirmPassword: string;
 
-  @Matches(/^(([0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2})|([0-9]{11}))$/,{
-    message:"CPF inválido"
+ 
+  @ApiProperty({
+    description:"CPF do usuário",
+    example:790
   })
   cpf: number;
 
   @IsBoolean()
+  @ApiProperty({
+    description:"Informar se o usuário é admin ou não",
+    example: true
+  })
   isAdmin: boolean;
 }
