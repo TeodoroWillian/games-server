@@ -1,26 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
+import { Game } from './entities/game.entity';
 
-@Injectable()
+@Injectable({})
 export class GameService {
-  create(createGameDto: CreateGameDto) {
-    return 'This action adds a new game';
+  constructor(private readonly prisma: PrismaService) {}
+
+  findAll(): Promise<Game[]> {
+    return this.prisma.game.findMany();
   }
 
-  findAll() {
-    return `This action returns all game`;
+  async findByID(id: string): Promise<Game> {
+    const record = await this.prisma.game.findUnique({ where: { id } });
+
+    if (!record) {
+      throw new NotFoundException(`Registro com o ID '${id}' não encontrado.`);
+    }
+
+    return record;
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} game`;
+  async findOne(id: string): Promise<Game> {
+    return this.findByID(id);
   }
 
-  update(id: string, updateGameDto: UpdateGameDto) {
-    return `This action updates a #${id} game`;
+  create(dto: CreateGameDto): Promise<Game> {
+    const data: Game = { ...dto };
+    return this.prisma.game.create({ data }).catch(this.handleError);
   }
 
-  delete(id: string) {
-    return `This action removes a #${id} game`;
+  async update(id: string, dto: UpdateGameDto): Promise<Game> {
+    await this.findByID(id);
+
+    const data: Partial<Game> = { ...dto };
+    return this.prisma.game
+      .update({ where: { id }, data })
+      .catch(this.handleError);
+  }
+
+  async delete(id: string) {
+    await this.findByID(id);
+    await this.prisma.game.delete({ where: { id } });
+  }
+
+  handleError(error: Error): undefined {
+    const errorLines = error.message?.split('/n');
+    const lastErrorLine = errorLines[errorLines.length - 1]?.trim();
+    throw new UnprocessableEntityException(
+      lastErrorLine || 'Algum erro ocorreu ao executar a operação',
+    );
   }
 }
