@@ -8,7 +8,7 @@ import { ApiTags } from "@nestjs/swagger/dist/decorators";
 
 @Controller('genre')
 export class GenreController{
-  constructor(private genreService: GenreService) {}
+  constructor(private readonly genreService: GenreService) {}
 
 
   @Get()
@@ -17,7 +17,7 @@ export class GenreController{
   }
 
   @Post()
-  create(@Body() createGenreDto: CreateGenreDto){
-    return this.genreService.create(createGenreDto);
+  create(@Body() dto: CreateGenreDto){
+    return this.genreService.create(dto);
   }
 }

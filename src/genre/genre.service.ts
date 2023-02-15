@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { PrismaService } from "src/prisma/prisma.service";
 import { CreateGenreDto } from "./dto/create-genre.dto";
 import { Genre } from "./entities/genre.entity";
 
@@ -7,15 +8,14 @@ import { Genre } from "./entities/genre.entity";
 })
 export class GenreService{
 
-  genres: Genre[] = [];
+ constructor(private readonly prisma: PrismaService) {}
  
   findAll() {
-    return this.genres;
+    return this.prisma.genre.findMany();
   }
 
-  create(createGenreDto: CreateGenreDto) {
-    const genre: Genre = {id:"Random_id", ...createGenreDto};
-    this.genres.push(genre);
-    return genre;
+  create(dto: CreateGenreDto) {
+    const data: Genre = { ...dto};
+   return this.prisma.genre.create({data})
   }
 }
