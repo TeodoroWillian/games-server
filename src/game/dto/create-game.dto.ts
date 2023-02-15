@@ -27,11 +27,11 @@ export class CreateGameDto {
   })
   year: number;
   @IsNumber({
-    maxDecimalPlaces: 1
+    maxDecimalPlaces: 2
   })
   @ApiProperty({
     description:"A nota do jogo no IMDB",
-    example: 6.6
+    example: 6
   })
   imdbScore: number;
   @IsUrl()
