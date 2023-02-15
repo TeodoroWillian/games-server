@@ -12,14 +12,18 @@ export class GenreService {
     return this.prisma.genre.findMany();
   }
 
-async  findOne(id: string): Promise<Genre> {
+  async findByID(id: string): Promise<Genre> {
     const record = await this.prisma.genre.findUnique({ where: { id } });
 
-    if (!record){
-      throw new NotFoundException(`Registro com o ID '${id}' não encontrado.`)
+    if (!record) {
+      throw new NotFoundException(`Registro com o ID '${id}' não encontrado.`);
     }
 
     return record;
+  }
+
+  async findOne(id: string): Promise<Genre> {
+    return this.findByID(id);
   }
 
   create(dto: CreateGenreDto): Promise<Genre> {
@@ -27,7 +31,9 @@ async  findOne(id: string): Promise<Genre> {
     return this.prisma.genre.create({ data });
   }
 
-  update(id: string, dto: UpdateGenreDto): Promise<Genre> {
+  async update(id: string, dto: UpdateGenreDto): Promise<Genre> {
+    await this.findByID(id);
+
     const data: Partial<Genre> = { ...dto };
     return this.prisma.genre.update({ where: { id }, data });
   }
