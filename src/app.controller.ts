@@ -1,5 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger/dist';
 import { AppService } from './app.service';
+
+
+
+@ApiTags('status')
 
 @Controller()
 export class AppController {
