@@ -10,11 +10,16 @@ export class GenreService{
 
  constructor(private readonly prisma: PrismaService) {}
  
-  findAll() {
+  findAll(): Promise<Genre[]> {
     return this.prisma.genre.findMany();
   }
 
-  create(dto: CreateGenreDto) {
+  findOne(id: string): Promise<Genre>{
+    return this.prisma.genre.findUnique({where:{id}}
+    )
+  }
+
+  create(dto: CreateGenreDto): Promise<Genre> {
     const data: Genre = { ...dto};
    return this.prisma.genre.create({data})
   }
