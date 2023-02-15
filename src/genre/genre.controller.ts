@@ -1,4 +1,4 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Post } from "@nestjs/common";
 
 
 
@@ -8,5 +8,10 @@ export class GenreController{
   @Get()
   findAll(){
     return 'Buscar todos gêneros';
+  }
+
+  @Post()
+  create(){
+    return "Criar um gênero";
   }
 }
