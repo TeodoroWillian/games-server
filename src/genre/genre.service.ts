@@ -10,7 +10,7 @@ export class GenreService{
   genres: Genre[] = [];
  
   findAll() {
-    return "Buscar todos os gêneros";
+    return this.genres;
   }
 
   create(createGenreDto: CreateGenreDto) {
